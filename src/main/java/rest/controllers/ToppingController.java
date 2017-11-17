@@ -10,9 +10,9 @@ import rest.pojos.Topping;
 import rest.repos.PizzaRepository;
 import rest.repos.ToppingRepository;
 
-import java.util.List;
 import java.util.Set;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -32,10 +32,9 @@ public class ToppingController {
 
     @RequestMapping(value="/", method = POST) // Map ONLY GET Requests
     public @ResponseBody String addNewPizza (@PathVariable("pizzaId")  Integer pizzaId,
-                                             @RequestParam Integer id,
                                              @RequestParam String name,
                                              @RequestParam Double price) {
-        Topping n = new Topping(id, name, price);
+        Topping n = new Topping(name, price);
         toppingRepository.save(n);
         Pizza current_pizza = pizzaRepository.findById(pizzaId);
         Set<Topping> toppings = current_pizza.getToppings();
@@ -47,8 +46,39 @@ public class ToppingController {
 
     @RequestMapping(value="/", method = GET) // Map ONLY GET Requests
     public @ResponseBody
-    ResponseEntity<List<Integer>> getToppingsOfPizza (@PathVariable("pizzaId")  Integer pizzaId) {
-        List<Integer> toppingIds = toppingRepository.findToppingIds(pizzaId);
+    ResponseEntity<Set<Integer>> getToppingsOfPizza (@PathVariable("pizzaId")  Integer pizzaId) {
+        Pizza current_pizza = pizzaRepository.findById(pizzaId);
+        Set<Integer> toppingIds = current_pizza.getToppingIds();
         return new ResponseEntity<>(toppingIds, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value="/{toppingId:[0-9]+}", method = GET) // Map ONLY GET Requests
+    public @ResponseBody
+    ResponseEntity<Topping> getToppingById (@PathVariable("pizzaId")  Integer pizzaId,
+                                            @PathVariable("toppingId")  Integer toppingId) {
+        Pizza current_pizza = pizzaRepository.findById(pizzaId);
+        Topping current_topping = current_pizza.getToppingById(toppingId);
+        if (current_topping == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else{
+            return new ResponseEntity<>(current_topping, HttpStatus.OK);
+        }
+    }
+
+
+    @RequestMapping(value="/{toppingId:[0-9]+}", method = DELETE) // Map ONLY GET Requests
+    public @ResponseBody
+    ResponseEntity<String> deleteToppingById (@PathVariable("pizzaId")  Integer pizzaId,
+                                            @PathVariable("toppingId")  Integer toppingId) {
+        Pizza current_pizza = pizzaRepository.findById(pizzaId);
+        if (current_pizza.deleteToppingById(toppingId)){
+            pizzaRepository.save(current_pizza);
+            return new ResponseEntity<>("OK", HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

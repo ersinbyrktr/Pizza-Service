@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Topping {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column
@@ -17,13 +18,12 @@ public class Topping {
     protected Topping() {
     }
 
-    public Topping(Integer id, String name, Double price) {
-        this.id = id;
+    public Topping(String name, Double price) {
         this.name = name;
         this.price = price;
     }
 
-    public Integer getId() {
+    Integer getId() {
         return id;
     }
 
@@ -46,4 +46,5 @@ public class Topping {
     public void setPrice(Double price) {
         this.price = price;
     }
+
 }

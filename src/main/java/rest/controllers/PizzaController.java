@@ -27,11 +27,10 @@ public class PizzaController {
     }
 
     @RequestMapping(value="/", method = POST) // Map ONLY GET Requests
-	public @ResponseBody String addNewPizza (@RequestParam Integer id,
-                                             @RequestParam String name,
+	public @ResponseBody String addNewPizza (@RequestParam String name,
                                              @RequestParam String size,
                                              @RequestParam Double price) {
-		Pizza n = new Pizza(id, name, size, price);
+		Pizza n = new Pizza(name, size, price);
 		pizzaRepository.save(n);
 		return "Saved";
 	}

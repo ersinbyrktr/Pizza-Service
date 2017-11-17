@@ -2,11 +2,13 @@ package rest.pojos;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class Pizza {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column
@@ -26,15 +28,13 @@ public class Pizza {
     }
 
 
-    public Pizza(Integer id, String name, String size, Double price) {
-        this.id = id;
+    public Pizza(String name, String size, Double price) {
         this.name = name;
         this.size = size;
         this.price = price;
     }
 
-    public Pizza(Integer id, String name, String size, Double price, Set<Topping> toppings) {
-        this.id = id;
+    public Pizza(String name, String size, Double price, Set<Topping> toppings) {
         this.name = name;
         this.size = size;
         this.price = price;
@@ -76,6 +76,33 @@ public class Pizza {
 
     public Set<Topping> getToppings() {
         return toppings;
+    }
+
+    public Set<Integer> getToppingIds() {
+        Set<Integer> ids = new HashSet<>();
+        for (Topping topping: toppings) {
+            ids.add(topping.getId());
+        }
+        return ids;
+    }
+
+    public Topping getToppingById(Integer toppingId) {
+        for (Topping topping: toppings) {
+            if (Objects.equals(topping.getId(), toppingId)){
+                return topping;
+            }
+        }
+        return null;
+    }
+
+    public boolean deleteToppingById(Integer toppingId) {
+        for (Topping topping: toppings) {
+            if (topping.getId().equals(toppingId)){
+                toppings.remove(topping);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setToppings(Set<Topping> toppings) {

@@ -1,5 +1,7 @@
 package rest.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,8 +16,9 @@ public class Pizza {
     @Column
     private String name;
 
-    @Column
-    private String size;
+    @Column(length = 32, columnDefinition = "varchar(255)")
+    @Enumerated(value = EnumType.STRING)
+    private Size size;
 
     @Column
 	private Double price;
@@ -28,13 +31,13 @@ public class Pizza {
     }
 
 
-    public Pizza(String name, String size, Double price) {
+    public Pizza(String name, Size size, Double price) {
         this.name = name;
         this.size = size;
         this.price = price;
     }
 
-    public Pizza(String name, String size, Double price, Set<Topping> toppings) {
+    public Pizza(String name, Size size, Double price, Set<Topping> toppings) {
         this.name = name;
         this.size = size;
         this.price = price;
@@ -57,16 +60,25 @@ public class Pizza {
 		this.name = name;
 	}
 
-	public String getSize() {
+	public Size getSize() {
 		return size;
 	}
 
-	public void setSize(String size) {
+	public void setSize(Size size) {
 		this.size = size;
 	}
 
-	public Double getPrice() {
-		return price;
+    public Double getPrice() {
+        return price;
+    }
+
+    @JsonIgnore
+	public Double getTotalPrice() {
+        Double toppingPrice= 0.;
+        for (Topping topping:toppings) {
+            toppingPrice += topping.getPrice();
+        }
+        return price + toppingPrice;
 	}
 
 	public void setPrice(Double price) {
@@ -74,10 +86,12 @@ public class Pizza {
 	}
 
 
+    @JsonIgnore
     public Set<Topping> getToppings() {
         return toppings;
     }
 
+    @JsonIgnore
     public Set<Integer> getToppingIds() {
         Set<Integer> ids = new HashSet<>();
         for (Topping topping: toppings) {
@@ -86,6 +100,7 @@ public class Pizza {
         return ids;
     }
 
+    @JsonIgnore
     public Topping getToppingById(Integer toppingId) {
         for (Topping topping: toppings) {
             if (Objects.equals(topping.getId(), toppingId)){
@@ -109,10 +124,9 @@ public class Pizza {
         this.toppings = toppings;
     }
 
-    public void addTopping(Topping topping) {
-        this.toppings.add(topping);
+    @JsonIgnore
+    public Location getLocation(String baseUrl){
+        return new Location(baseUrl+getId());
     }
-    
-    
 }
 

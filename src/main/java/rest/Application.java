@@ -6,13 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import rest.pojos.Order;
-import rest.pojos.OrderItem;
-import rest.pojos.Pizza;
-import rest.pojos.Topping;
+import rest.pojos.*;
 import rest.repos.OrderItemRepository;
 import rest.repos.OrderRepository;
 import rest.repos.PizzaRepository;
@@ -23,9 +17,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootApplication
-@ComponentScan({"rest.controllers"})
-@EntityScan("rest.pojos")
-@EnableJpaRepositories("rest.repos")
 public class Application  implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
@@ -68,8 +59,8 @@ public class Application  implements CommandLineRunner {
         }};
         toppingRepository.save(toppings1);
         toppingRepository.save(toppings2);
-        Pizza Pizza1 = new Pizza( "Pizza1", "Standard",2.45, toppings1);
-        Pizza Pizza2 = new Pizza( "Pizza2", "Large",2.45, toppings2);
+        Pizza Pizza1 = new Pizza( "Pizza1", Size.Standard,2.45, toppings1);
+        Pizza Pizza2 = new Pizza( "Pizza2", Size.Large,2.45, toppings2);
         pizzaRepository.save(new HashSet<Pizza>() {{
             add(Pizza1);
             add(Pizza2);
@@ -89,8 +80,8 @@ public class Application  implements CommandLineRunner {
             add(OrderItem2);
             add(OrderItem3);
         }};
-        Order order1 = new Order(OIS1, 5.75, "asdas");
-        Order order2 = new Order(OIS2, 7.75, "qweasdas");
+        Order order1 = new Order(OIS1, "asdas");
+        Order order2 = new Order(OIS2, "qweasdas");
         orderRepository.save(order1);
 
     }

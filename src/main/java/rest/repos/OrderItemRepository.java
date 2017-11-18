@@ -8,10 +8,10 @@ import rest.pojos.OrderItem;
 import java.util.List;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
-    String FIND_ORDERITEM_IDS = "select distinct t.id from OrderList t";
+    String FIND_ORDERITEMs_BY_PIZZA_ID = "select * from order_item t where t.pizza_id=?1";
 
-    @Query(value = FIND_ORDERITEM_IDS, nativeQuery = true)
-    List<Integer> findOrderIds();
 
-    OrderItem findById(@Param("id") Integer id);
+    @Query(value = FIND_ORDERITEMs_BY_PIZZA_ID, nativeQuery = true)
+    List<OrderItem> findOrderItemsByPizzaId(@Param("pizzaId") Integer pizzaId);
+
 }

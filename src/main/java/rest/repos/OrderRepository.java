@@ -8,7 +8,7 @@ import rest.pojos.Order;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-    String FIND_ORDER_IDS = "select distinct t.id from Order t";
+    String FIND_ORDER_IDS = "select distinct t.id from Orders t";
 
     @Query(value = FIND_ORDER_IDS, nativeQuery = true)
     List<Integer> findOrderIds();

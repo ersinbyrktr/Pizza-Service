@@ -1,5 +1,7 @@
 package rest.pojos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,7 +25,7 @@ public class Topping {
         this.price = price;
     }
 
-    Integer getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -47,4 +49,8 @@ public class Topping {
         this.price = price;
     }
 
+    @JsonIgnore
+    public Location getLocation(String baseUrl){
+        return new Location(baseUrl+getId());
+    }
 }

@@ -38,7 +38,6 @@ public class PizzaController {
     @RequestMapping( method = POST) // Map ONLY GET Requests
 	public @ResponseBody ResponseEntity addNewPizza (@RequestParam String name,
                                                      @RequestParam Size size,
-                                                     @RequestParam Double price,
                                                      HttpServletRequest request) {
 		Pizza newPizza = new Pizza(name, size);
 		pizzaRepository.save(newPizza);

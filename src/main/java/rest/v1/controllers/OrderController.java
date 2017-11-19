@@ -1,4 +1,4 @@
-package rest.controllers;
+package rest.v1.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,14 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import rest.pojos.Location;
-import rest.pojos.Order;
-import rest.pojos.OrderItem;
-import rest.pojos.Pizza;
-import rest.projections.LimitedOrderItem;
-import rest.repos.OrderItemRepository;
-import rest.repos.OrderRepository;
-import rest.repos.PizzaRepository;
+import rest.v1.pojos.Order;
+import rest.v1.pojos.OrderItem;
+import rest.v1.pojos.Pizza;
+import rest.v1.projections.LimitedOrderItem;
+import rest.v1.repos.OrderItemRepository;
+import rest.v1.repos.OrderRepository;
+import rest.v1.repos.PizzaRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -25,7 +24,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping(path="/order")
+@RequestMapping(path="v1/order")
 public class OrderController {
 
     private final OrderRepository orderRepository;
@@ -39,7 +38,7 @@ public class OrderController {
         this.pizzaRepository = pizzaRepository;
     }
 
-    @RequestMapping(value="/", method = POST) // Map ONLY GET Requests
+    @RequestMapping(method = POST) // Map ONLY GET Requests
     public @ResponseBody
     ResponseEntity addNewOrder (@RequestParam String recipient,
                                           @RequestParam(name="orderItems") String rawOrderItems,
@@ -64,7 +63,7 @@ public class OrderController {
     }
 
 
-    @RequestMapping(value="/", method= GET)
+    @RequestMapping( method= GET)
     public @ResponseBody
     ResponseEntity<List<Integer>> getAllOrders() {
         List<Integer> result = orderRepository.findOrderIds();

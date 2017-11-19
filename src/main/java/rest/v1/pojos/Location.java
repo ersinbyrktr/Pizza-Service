@@ -1,4 +1,4 @@
-package rest.pojos;
+package rest.v1.pojos;
 
 public class Location {
     private String location;

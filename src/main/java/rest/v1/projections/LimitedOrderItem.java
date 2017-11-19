@@ -1,4 +1,4 @@
-package rest.projections;
+package rest.v1.projections;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

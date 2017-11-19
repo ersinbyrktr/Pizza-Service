@@ -1,12 +1,12 @@
-package rest.pojos;
+package rest.v1.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.annotation.Nullable;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "orderitem")
 public class OrderItem {
 
     @Id

@@ -1,9 +1,9 @@
-package rest.repos;
+package rest.v1.repos;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import rest.pojos.Order;
+import rest.v1.pojos.Order;
 
 import java.util.List;
 

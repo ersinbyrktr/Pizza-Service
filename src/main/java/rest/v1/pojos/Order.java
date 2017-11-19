@@ -1,4 +1,4 @@
-package rest.pojos;
+package rest.v1.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,6 +18,7 @@ public class Order {
     @JsonProperty("id")
     private Integer id;
 
+    @JoinTable(name = "orderorderitems")
     @OneToMany(fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     @JsonProperty("OrderItems")
     private Set<OrderItem> orderItems;
@@ -92,7 +93,7 @@ public class Order {
     private void updatePrice(){
         totalPrice = 0D;
         for (OrderItem orderItem:orderItems) {
-            totalPrice += orderItem.getPizza().getTotalPrice()*orderItem.getQuantity();
+            totalPrice += orderItem.getPizza().getPrice()*orderItem.getQuantity();
         }
         totalPrice =  Math.round(totalPrice * 100D) / 100D;
     }

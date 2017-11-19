@@ -1,4 +1,4 @@
-package rest.controllers;
+package rest.v1.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -6,12 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import rest.pojos.Location;
-import rest.pojos.Pizza;
-import rest.pojos.Size;
-import rest.pojos.Topping;
-import rest.repos.PizzaRepository;
-import rest.repos.ToppingRepository;
+import rest.v1.pojos.Location;
+import rest.v1.pojos.Pizza;
+import rest.v1.pojos.Size;
+import rest.v1.pojos.Topping;
+import rest.v1.repos.PizzaRepository;
+import rest.v1.repos.ToppingRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @CrossOrigin(origins = "*")
 @RestController    // This means that this class is a Controller
-@RequestMapping(path="/pizza") // This means URL's start with /demo (after Application path)
+@RequestMapping(path="v1/pizza") // This means URL's start with /demo (after Application path)
 public class PizzaController {
 
     private final ToppingRepository toppingRepository;
@@ -35,17 +35,17 @@ public class PizzaController {
         this.pizzaRepository = pizzaRepository;
     }
 
-    @RequestMapping(value="/", method = POST) // Map ONLY GET Requests
+    @RequestMapping( method = POST) // Map ONLY GET Requests
 	public @ResponseBody ResponseEntity addNewPizza (@RequestParam String name,
                                                      @RequestParam Size size,
                                                      @RequestParam Double price,
                                                      HttpServletRequest request) {
-		Pizza newPizza = new Pizza(name, size, price);
+		Pizza newPizza = new Pizza(name, size);
 		pizzaRepository.save(newPizza);
         return new ResponseEntity<>(newPizza.getLocation(request.getRequestURL().toString()), HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value="/", method= GET)
+	@RequestMapping( method= GET)
 	public @ResponseBody
     ResponseEntity<List<Integer>> getAllPizzas() {
 	    List<Integer> result = pizzaRepository.findPizzaIds();
@@ -73,14 +73,13 @@ public class PizzaController {
                                             @PathVariable("pizzaId")  Integer pizzaId,
                                             @RequestParam String name,
                                             @RequestParam Size size,
-                                            @RequestParam Double price,
                                             HttpServletResponse res) {
         Pizza current_pizza = pizzaRepository.findById(pizzaId);
         if (current_pizza == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         current_pizza.setName(name);
         current_pizza.setSize(size);
-        current_pizza.setPrice(price);
+        current_pizza.setPrice();
         pizzaRepository.save(current_pizza);
         return new ResponseEntity<>( HttpStatus.NO_CONTENT);
     }
@@ -150,6 +149,7 @@ public class PizzaController {
         Pizza current_pizza = pizzaRepository.findById(pizzaId);
         if (current_pizza.deleteToppingById(toppingId)){
             pizzaRepository.save(current_pizza);
+            toppingRepository.delete(toppingId);
             return new ResponseEntity<>("OK", HttpStatus.NO_CONTENT);
         }
         else{

@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import rest.pojos.*;
-import rest.repos.OrderItemRepository;
-import rest.repos.OrderRepository;
-import rest.repos.PizzaRepository;
-import rest.repos.ToppingRepository;
+import rest.v1.pojos.*;
+import rest.v1.repos.OrderItemRepository;
+import rest.v1.repos.OrderRepository;
+import rest.v1.repos.PizzaRepository;
+import rest.v1.repos.ToppingRepository;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
@@ -59,8 +59,8 @@ public class Application  implements CommandLineRunner {
         }};
         toppingRepository.save(toppings1);
         toppingRepository.save(toppings2);
-        Pizza Pizza1 = new Pizza( "Pizza1", Size.Standard,2.45, toppings1);
-        Pizza Pizza2 = new Pizza( "Pizza2", Size.Large,2.45, toppings2);
+        Pizza Pizza1 = new Pizza( "Pizza1", Size.Standard, toppings1);
+        Pizza Pizza2 = new Pizza( "Pizza2", Size.Large, toppings2);
         pizzaRepository.save(new HashSet<Pizza>() {{
             add(Pizza1);
             add(Pizza2);

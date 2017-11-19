@@ -1,4 +1,4 @@
-package rest.pojos;
+package rest.v1.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity // This tells Hibernate to make a table out of this class
+@Table(name = "pizza")
 public class Pizza {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,6 +24,7 @@ public class Pizza {
     @Column
 	private Double price;
 
+    @JoinTable(name = "pizzatoppings")
     @OneToMany
     private Set<Topping> toppings;
 
@@ -31,17 +33,17 @@ public class Pizza {
     }
 
 
-    public Pizza(String name, Size size, Double price) {
+    public Pizza(String name, Size size) {
         this.name = name;
         this.size = size;
-        this.price = price;
+        setPrice();
     }
 
-    public Pizza(String name, Size size, Double price, Set<Topping> toppings) {
+    public Pizza(String name, Size size,  Set<Topping> toppings) {
         this.name = name;
         this.size = size;
-        this.price = price;
         this.toppings = toppings;
+        setPrice();
     }
 
     public Integer getId() {
@@ -68,12 +70,7 @@ public class Pizza {
 		this.size = size;
 	}
 
-    public Double getPrice() {
-        return price;
-    }
-
-    @JsonIgnore
-	public Double getTotalPrice() {
+	public Double getPrice() {
         Double toppingPrice= 0.;
         for (Topping topping:toppings) {
             toppingPrice += topping.getPrice();
@@ -81,8 +78,11 @@ public class Pizza {
         return price + toppingPrice;
 	}
 
-	public void setPrice(Double price) {
-		this.price = price;
+	public void setPrice() {
+        if (size == Size.Large)
+            price = 8.50;
+        else
+            price = 5.00;
 	}
 
 

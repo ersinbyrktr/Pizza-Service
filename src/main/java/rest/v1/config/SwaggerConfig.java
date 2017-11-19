@@ -1,12 +1,16 @@
-package rest.config;
+package rest.v1.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Collections;
 
 @Configuration
 @EnableSwagger2
@@ -16,7 +20,18 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
+                .paths(PathSelectors.ant("/v1/**"))
+                .build()
+                .apiInfo(apiInfo());
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfo(
+                "My Pizza Service",
+                "This is the pizza service project for EC",
+                "1.0",
+                null,
+                new Contact("Ersin Bayraktar", null, "ersinbyrktr@gmail.com"),
+                null, null, Collections.emptyList());
     }
 }

@@ -1,10 +1,11 @@
-package rest.pojos;
+package rest.v1.pojos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "topping")
 public class Topping {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

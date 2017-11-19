@@ -67,7 +67,7 @@ public class Order {
 
     @JsonIgnore
     public Location getLocation(String baseUrl){
-        return new Location(baseUrl+getId());
+        return new Location(baseUrl+"/"+getId());
     }
 
     public void setOrderItems(Set<OrderItem> orderItems) {
